@@ -38,3 +38,7 @@ or
 
 hadoop jar TreeNodeRooterJob.job 2 input/dataset.1.txt output 
 
+##Thanks
+I got super help from my follow Cloudera SAs : Jayant Shekar and Carlo Piva
+
+
