@@ -4,13 +4,13 @@ This is a very simple Giraph job for the main purpose of teaching.
 
 The example will take nodes from a text file in the following format
 
-<ID>|<Name>|<IDs of child separated by commons>
+{ID}|{Name}|{IDs of child separated by commons}
 
-Examples of this format can be found in the example dataset in the "sampledata" folder
+Examples of this format can be found in the example dataset in the sampledata folder
 
 The final output of this job will be
 
-<ID>|<Name>,<Root or child>,<True Root ID>,<Depth in Tree>|<IDs of child separated by commons>
+{ID}|{Name},{Root or child},{True Root ID},{Depth in Tree}|{IDs of child separated by commons}
 
 This has many uses, in that it shows that Giraph is a great tool for building trees.
 
@@ -32,7 +32,7 @@ In the target folder there should be a ruinable jar.
 
 to execute use the hadoop cmd like the following
 
-hadoop jar TreeNodeRooterJob.job <numbersOfWorkers> <inputLocaiton> <outputLocation>
+hadoop jar TreeNodeRooterJob.job {numbersOfWorkers} {inputLocaiton} {outputLocation}
 
 or
 
