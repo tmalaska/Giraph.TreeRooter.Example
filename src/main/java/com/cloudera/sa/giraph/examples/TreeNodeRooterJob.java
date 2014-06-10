@@ -4,7 +4,6 @@ import org.apache.giraph.io.formats.GiraphFileInputFormat;
 import org.apache.giraph.job.GiraphJob;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 
@@ -19,15 +18,14 @@ public class TreeNodeRooterJob
 			return;
 		}
 		
-		JobContext j;
-		
+	
 		String numberOfWorkers = args[0];
 		String inputLocation = args[1];
 		String outputLocation = args[2];
 		
 	    GiraphJob bspJob = new GiraphJob(new Configuration(), TreeNodeRooterJob.class.getName());
 	    
-	    bspJob.getConfiguration().setVertexClass(TreeNodeVertix.class);
+	    bspJob.getConfiguration().setComputationClass(TreeNodeVertix.class);
 	    bspJob.getConfiguration().setVertexInputFormatClass(TreeRecordTextVertexInputFormat.class);
 	    GiraphFileInputFormat.addVertexInputPath(bspJob.getConfiguration(), new Path(inputLocation));
 	    

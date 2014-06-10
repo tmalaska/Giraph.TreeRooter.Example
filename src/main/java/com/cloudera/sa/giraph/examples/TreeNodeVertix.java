@@ -4,32 +4,32 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 import org.apache.giraph.edge.Edge;
+import org.apache.giraph.graph.BasicComputation;
 import org.apache.giraph.graph.Vertex;
-import org.apache.giraph.worker.BspServiceWorker;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 
 
 public class TreeNodeVertix extends
-Vertex<LongWritable, Text, LongWritable, Text>{
+	BasicComputation<LongWritable, Text, LongWritable,Text> {
 
 	Pattern commonSpliter = Pattern.compile(",");
 	
 	@Override
-	public void compute(Iterable<Text> messages) throws IOException {
+	public void compute(Vertex<LongWritable, Text, LongWritable> vertex,
+			Iterable<Text> messages) throws IOException {
+		// TODO Auto-generated method stub
 		
-		
-		TreeNodeWorkerContext workerContext =
-		          (TreeNodeWorkerContext) getWorkerContext();
+		TreeNodeWorkerContext workerContext = getWorkerContext();
 		
 		long superstep = getSuperstep();
 		
-		System.out.println("-id:" + getId() + " -value:" + getValue());
+		System.out.println("-id:" + vertex.getId() + " -value:" + vertex.getValue());
 		System.out.println("-superstep:" + superstep);
 		
 		if ((superstep > 0 && workerContext.getLinksMadeThisCompute() == 0) || superstep > workerContext.getMaxSuperSteps()) {
 			System.out.println("voting to halt!!");
-	        voteToHalt();
+	        vertex.voteToHalt();
 	        return;
 	    } else if (superstep == 0) {
 			
@@ -37,10 +37,10 @@ Vertex<LongWritable, Text, LongWritable, Text>{
 			
 			Text newMessage = new Text();
 			
-			newMessage.set(getId().toString());
+			newMessage.set(vertex.getId().toString());
 			
 			long messageSentCounter = 0;
-			for(Edge<LongWritable, LongWritable> edge: getEdges()) {
+			for(Edge<LongWritable, LongWritable> edge: vertex.getEdges()) {
 				this.sendMessage(edge.getValue(), newMessage);
 				messageSentCounter++;
 				System.out.println("---SendMessage:" + edge.getValue());
@@ -60,15 +60,15 @@ Vertex<LongWritable, Text, LongWritable, Text>{
 			}
 			if (counter > 0) {
 				System.out.println("--Is a child node");
-				Text newValue = new Text(getValue().toString() + ",child");
-				this.setValue(newValue);
+				Text newValue = new Text(vertex.getValue().toString() + ",child");
+				vertex.setValue(newValue);
 			} else {
 				System.out.println("--Root Sending Messages");
-				Text newValue = new Text(getValue().toString() + ",root," + getId() + ",0");
-				this.setValue(newValue);
+				Text newValue = new Text(vertex.getValue().toString() + ",root," + vertex.getId() + ",0");
+				vertex.setValue(newValue);
 				
-				Text newMessage = new Text(getId().toString());
-				for(Edge<LongWritable, LongWritable> edge: getEdges()) {
+				Text newMessage = new Text(vertex.getId().toString());
+				for(Edge<LongWritable, LongWritable> edge: vertex.getEdges()) {
 					this.sendMessage(edge.getValue(), newMessage);
 					messageSentCounter++;
 					System.out.println("---SendMessage:" + edge.getValue());
@@ -86,13 +86,13 @@ Vertex<LongWritable, Text, LongWritable, Text>{
 				
 				String[] parts = commonSpliter.split(messageStr);
 				
-				Text newValue = new Text(getValue().toString() + "," + messageStr + "," + (superstep-1) );
-				this.setValue(newValue);
+				Text newValue = new Text(vertex.getValue().toString() + "," + messageStr + "," + (superstep-1) );
+				vertex.setValue(newValue);
 				
 				Text newMessage = new Text(parts[0]);
 				
 				
-				for(Edge<LongWritable, LongWritable> edge: getEdges()) {
+				for(Edge<LongWritable, LongWritable> edge: vertex.getEdges()) {
 					this.sendMessage(edge.getValue(), newMessage);
 					messageSentCounter++;
 					System.out.println("---SendMessage:" + edge.getValue());

@@ -33,7 +33,7 @@ public class TreeRecordTextVertexInputFormat extends TextVertexInputFormat<LongW
 		}
 
 		@Override
-		public Vertex<LongWritable, Text, LongWritable, ?> getCurrentVertex() throws IOException,
+		public Vertex<LongWritable, Text, LongWritable> getCurrentVertex() throws IOException,
 				InterruptedException {
 			Text line = getRecordReader().getCurrentValue();
 			String[] majorParts = pipeSpliter.split(line.toString());
@@ -53,7 +53,7 @@ public class TreeRecordTextVertexInputFormat extends TextVertexInputFormat<LongW
 				}
 			}
 			
-		    Vertex<LongWritable, Text, LongWritable, ?> vertex = getConf().createVertex();
+		    Vertex<LongWritable, Text, LongWritable> vertex = getConf().createVertex();
 		    
 		    
 		    vertex.initialize(id, value, edgeIdList);

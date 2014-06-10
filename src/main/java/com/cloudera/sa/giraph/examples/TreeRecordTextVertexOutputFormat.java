@@ -25,7 +25,7 @@ public class TreeRecordTextVertexOutputFormat extends TextVertexOutputFormat<Lon
 		Text newValue = new Text();
 		
 		public void writeVertex(
-				Vertex<LongWritable, Text, LongWritable, ?> vertex)
+				Vertex<LongWritable, Text, LongWritable> vertex)
 				throws IOException, InterruptedException {
 			
 			Iterable<Edge<LongWritable, LongWritable>> edges = vertex.getEdges();
